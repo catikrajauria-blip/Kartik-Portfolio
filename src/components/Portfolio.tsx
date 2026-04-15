@@ -146,7 +146,7 @@ export default function Portfolio() {
             className="hidden lg:block relative aspect-[3/4] bg-card border border-white/5 p-1"
           >
             <img 
-              src="/profile.png" 
+              src="/Gemini_Generated_Image_4x561s4x561s4x56.png" 
               alt="Kartik Rajauria"
               className="object-cover w-full h-full hover:scale-105 transition-all duration-1000"
               referrerPolicy="no-referrer"
