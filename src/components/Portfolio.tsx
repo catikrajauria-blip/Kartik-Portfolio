@@ -316,7 +316,7 @@ export default function Portfolio() {
             className="relative p-1 border border-white/5 bg-card"
           >
             <img 
-              src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80&w=1000" 
+              src="/Gemini_Generated_Image_40jynt40jynt40jy.png" 
               alt="Academic Excellence"
               className="object-cover w-full aspect-[4/5]"
               referrerPolicy="no-referrer"
