@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Georgia", serif;
+  --font-heading: var(--font-serif);
+  --font-display: var(--font-serif);
+
+  --color-background: #0A0A0A;
+  --color-foreground: #FFFFFF;
+  --color-card: #151515;
+  --color-card-foreground: #FFFFFF;
+  --color-popover: #151515;
+  --color-popover-foreground: #FFFFFF;
+  --color-primary: #D4AF37;
+  --color-primary-foreground: #0A0A0A;
+  --color-secondary: #1A1A1A;
+  --color-secondary-foreground: #FFFFFF;
+  --color-muted: #1A1A1A;
+  --color-muted-foreground: #999999;
+  --color-accent: #D4AF37;
+  --color-accent-foreground: #0A0A0A;
+  --color-destructive: #FF4444;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-input: rgba(255, 255, 255, 0.05);
+  --color-ring: #D4AF37;
+  
+  --radius-lg: 4px;
+  --radius-md: 2px;
+  --radius-sm: 1px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-accent/30 selection:text-accent;
+  }
+}
+
+@layer utilities {
+  .text-display {
+    @apply font-serif leading-[1.1] tracking-tight;
+  }
+  
+  .text-heading {
+    @apply font-serif tracking-tight;
+  }
+  
+  .label-caps {
+    @apply text-[12px] uppercase text-accent tracking-[3px] font-sans font-medium;
+  }
+  
+  .glass {
+    @apply bg-white/[0.03] backdrop-blur-xl border border-white/10;
+  }
+}
