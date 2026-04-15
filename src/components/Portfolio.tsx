@@ -24,28 +24,28 @@ const projects = [
   {
     title: "qZSI INVERTER",
     category: "Renewable Energy / Research",
-    image: "/input_file_3.png",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=1000",
     description: "Addressing common mode voltage (CMV) issues in Single Phase Quasi Z Source Inverters for PV applications using PWM techniques.",
     tags: ["MATLAB", "PV Systems", "PWM"]
   },
   {
     title: "g POD DEVICE",
     category: "Experimental / Robotics",
-    image: "/input_file_0.png",
+    image: "https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=1000",
     description: "A dual-purpose device for dustbin and cleaning, presented at the 3rd International Conference on Data Intelligence.",
     tags: ["Hardware", "Innovation", "Research"]
   },
   {
     title: "BMS ON MATLAB",
     category: "EV Technology",
-    image: "/input_file_2.png",
+    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1000",
     description: "Comprehensive Battery Management System for electric vehicles featuring real-time monitoring and safety algorithms.",
     tags: ["MATLAB", "EV", "Algorithms"]
   },
   {
     title: "H-BRIDGE PROJECTS",
     category: "Electronics",
-    image: "/input_file_4.png",
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000",
     description: "Collaboration on H-bridge, CUK Converter, and Arduino-based power electronics projects.",
     tags: ["Arduino", "Circuit Design", "CUK"]
   }
@@ -148,7 +148,7 @@ export default function Portfolio() {
             <img 
               src="/intro.png" 
               alt="Kartik Rajauria"
-              className="object-cover w-full h-full grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-1000"
+              className="object-cover w-full h-full hover:scale-105 transition-all duration-1000"
               referrerPolicy="no-referrer"
             />
           </motion.div>
@@ -193,7 +193,7 @@ export default function Portfolio() {
                       <img 
                         src={project.image} 
                         alt={project.title}
-                        className="object-cover w-full h-full grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                        className="object-cover w-full h-full group-hover:scale-105 transition-all duration-700"
                         referrerPolicy="no-referrer"
                       />
                     </div>
@@ -316,9 +316,9 @@ export default function Portfolio() {
             className="relative p-1 border border-white/5 bg-card"
           >
             <img 
-              src="/input_file_1.png" 
-              alt="SRM University"
-              className="object-cover w-full aspect-[4/5] grayscale"
+              src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000" 
+              alt="Academic Excellence"
+              className="object-cover w-full aspect-[4/5]"
               referrerPolicy="no-referrer"
             />
             <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-accent p-10 flex flex-col justify-center text-background">
