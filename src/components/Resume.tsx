@@ -50,22 +50,27 @@ const Resume = () => {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-[11px] uppercase tracking-widest font-medium text-muted-foreground">
-              <div className="flex items-center gap-3">
+              <a href="mailto:rajauriak1@gmail.com" className="flex items-center gap-3 hover:text-accent transition-colors">
                 <Mail className="w-4 h-4 text-accent" />
                 rajauriak1@gmail.com
-              </div>
-              <div className="flex items-center gap-3">
+              </a>
+              <a href="tel:9893025912" className="flex items-center gap-3 hover:text-accent transition-colors">
                 <Phone className="w-4 h-4 text-accent" />
                 9893025912
-              </div>
+              </a>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-accent" />
                 Indore, Madhya Pradesh
               </div>
-              <div className="flex items-center gap-3">
+              <a 
+                href="https://www.linkedin.com/in/kartik-rajauria-2a52b521a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 hover:text-accent transition-colors"
+              >
                 <Linkedin className="w-4 h-4 text-accent" />
                 LinkedIn Profile
-              </div>
+              </a>
             </div>
           </div>
         </header>
