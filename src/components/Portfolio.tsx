@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { 
   Github, 
   Linkedin, 
@@ -12,7 +12,8 @@ import {
   Cpu, 
   Globe,
   ArrowRight,
-  ChevronRight
+  ChevronRight,
+  Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -88,6 +89,43 @@ export default function Portfolio() {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  const [formState, setFormState] = React.useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch("https://formspree.io/f/xvgopvze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          _subject: `New Portfolio Message from ${formState.name}`
+        })
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormState({ name: '', email: '', message: '' });
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div ref={containerRef} className="relative min-h-screen bg-background text-foreground selection:bg-accent/30 selection:text-accent font-sans">
@@ -391,25 +429,68 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <form className="space-y-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Name</label>
-                  <Input className="rounded-none bg-white/[0.02] border-white/10 h-14 focus:border-accent/50" />
+            {submitted ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-accent/10 border border-accent/20 p-12 text-center space-y-6"
+              >
+                <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Check className="w-10 h-10 text-background" />
+                </div>
+                <h3 className="text-3xl font-serif italic">Message Sent!</h3>
+                <p className="text-muted-foreground max-w-xs mx-auto">
+                  Thank you for reaching out. I'll get back to you as soon as possible.
+                </p>
+                <Button 
+                  onClick={() => setSubmitted(false)}
+                  variant="outline" 
+                  className="rounded-none border-white/10 hover:bg-white/5"
+                >
+                  Send Another Message
+                </Button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Name</label>
+                    <Input 
+                      required
+                      value={formState.name}
+                      onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                      className="rounded-none bg-white/[0.02] border-white/10 h-14 focus:border-accent/50" 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Email</label>
+                    <Input 
+                      required
+                      type="email" 
+                      value={formState.email}
+                      onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                      className="rounded-none bg-white/[0.02] border-white/10 h-14 focus:border-accent/50" 
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Email</label>
-                  <Input type="email" className="rounded-none bg-white/[0.02] border-white/10 h-14 focus:border-accent/50" />
+                  <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Message</label>
+                  <Textarea 
+                    required
+                    value={formState.message}
+                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                    className="rounded-none bg-white/[0.02] border-white/10 min-h-[160px] focus:border-accent/50" 
+                  />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Message</label>
-                <Textarea className="rounded-none bg-white/[0.02] border-white/10 min-h-[160px] focus:border-accent/50" />
-              </div>
-              <Button className="w-full h-16 bg-accent hover:bg-accent/90 text-background rounded-none text-lg font-serif italic">
-                Send Message
-              </Button>
-            </form>
+                <Button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full h-16 bg-accent hover:bg-accent/90 text-background rounded-none text-lg font-serif italic disabled:opacity-50"
+                >
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </Button>
+              </form>
+            )}
           </div>
         </div>
       </section>
