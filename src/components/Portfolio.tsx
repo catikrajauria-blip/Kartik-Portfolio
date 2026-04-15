@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import { 
   Github, 
   Linkedin, 
@@ -62,7 +63,7 @@ const skills = [
 const experience = [
   {
     company: "VE Commercial Vehicles",
-    role: "Functional Trainee",
+    role: "Assistant Manager",
     period: "April 2024 - May 2026",
     location: "Pitampur, MP",
     description: "Overseeing machine shop operations, managing CNC/PLC systems (Siemens, ABB robots), and ensuring optimal performance of hydraulic/pneumatic systems."
@@ -140,9 +141,11 @@ export default function Portfolio() {
           <a href="#about" className="hover:text-foreground transition-colors border-accent/0 hover:border-b border-accent pb-1">Profile</a>
           <a href="#contact" className="hover:text-foreground transition-colors border-accent/0 hover:border-b border-accent pb-1">Contact</a>
         </div>
-        <Button variant="outline" className="rounded-none border-white/20 hover:bg-white/5 font-serif italic px-6">
-          Resume
-        </Button>
+        <Link to="/resume">
+          <Button variant="outline" className="rounded-none border-white/20 hover:bg-white/5 font-serif italic px-6">
+            Resume
+          </Button>
+        </Link>
       </nav>
 
       {/* Hero Section */}

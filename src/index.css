@@ -35,6 +35,34 @@
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-accent/30 selection:text-accent;
   }
+
+  @media print {
+    nav, footer, button {
+      display: none !important;
+    }
+    body {
+      background: white !important;
+      color: black !important;
+    }
+    .bg-background, .bg-card, .bg-white\/\[0\.02\] {
+      background: white !important;
+    }
+    .text-foreground, .text-muted-foreground, .text-accent {
+      color: black !important;
+    }
+    .border-white\/5, .border-white\/10 {
+      border-color: #eee !important;
+    }
+    main {
+      padding-top: 0 !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+    }
+    .motion-div {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 }
 
 @layer utilities {
