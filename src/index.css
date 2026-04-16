@@ -1,34 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Georgia", serif;
-  --font-heading: var(--font-serif);
-  --font-display: var(--font-serif);
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-heading: var(--font-sans);
+  --font-display: var(--font-sans);
 
-  --color-background: #0A0A0A;
-  --color-foreground: #FFFFFF;
-  --color-card: #151515;
-  --color-card-foreground: #FFFFFF;
-  --color-popover: #151515;
-  --color-popover-foreground: #FFFFFF;
-  --color-primary: #D4AF37;
-  --color-primary-foreground: #0A0A0A;
-  --color-secondary: #1A1A1A;
-  --color-secondary-foreground: #FFFFFF;
-  --color-muted: #1A1A1A;
-  --color-muted-foreground: #999999;
-  --color-accent: #D4AF37;
-  --color-accent-foreground: #0A0A0A;
-  --color-destructive: #FF4444;
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-input: rgba(255, 255, 255, 0.05);
-  --color-ring: #D4AF37;
+  --color-background: #020617; /* Deep Navy */
+  --color-foreground: #f8fafc;
+  --color-card: #0f172a;
+  --color-card-foreground: #f8fafc;
+  --color-popover: #0f172a;
+  --color-popover-foreground: #f8fafc;
+  --color-primary: #0ea5e9; /* Electric Blue */
+  --color-primary-foreground: #020617;
+  --color-secondary: #1e293b;
+  --color-secondary-foreground: #f8fafc;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-accent: #10b981; /* Emerald Green */
+  --color-accent-foreground: #020617;
+  --color-destructive: #ef4444;
+  --color-border: rgba(14, 165, 233, 0.1);
+  --color-input: rgba(14, 165, 233, 0.05);
+  --color-ring: #0ea5e9;
   
-  --radius-lg: 4px;
-  --radius-md: 2px;
-  --radius-sm: 1px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
 }
 
 @layer base {
@@ -76,18 +76,32 @@
 
 @layer utilities {
   .text-display {
-    @apply font-serif leading-[1.1] tracking-tight;
+    @apply font-sans font-bold leading-[1.1] tracking-tight;
   }
   
   .text-heading {
-    @apply font-serif tracking-tight;
+    @apply font-sans font-semibold tracking-tight;
   }
   
   .label-caps {
-    @apply text-[12px] uppercase text-accent tracking-[3px] font-sans font-medium;
+    @apply text-[12px] uppercase text-primary tracking-[3px] font-mono font-medium;
   }
   
   .glass {
-    @apply bg-white/[0.03] backdrop-blur-xl border border-white/10;
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  }
+
+  .neon-blue {
+    @apply shadow-[0_0_15px_rgba(14,165,233,0.3)] border-primary/30;
+  }
+
+  .neon-green {
+    @apply shadow-[0_0_15px_rgba(16,185,129,0.3)] border-accent/30;
+  }
+
+  .cyber-grid {
+    background-image: linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
   }
 }

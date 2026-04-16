@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from "motion/react";
-import React, { useRef } from "react";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { 
   Github, 
@@ -65,7 +65,7 @@ const experience = [
     company: "VE Commercial Vehicles",
     role: "Assistant Manager",
     period: "April 2024 - May 2026",
-    location: "Pitampur, MP",
+    location: "Pithampur, MP",
     description: "Overseeing machine shop operations, managing CNC/PLC systems (Siemens, ABB robots), and ensuring optimal performance of hydraulic/pneumatic systems."
   },
   {
@@ -79,13 +79,25 @@ const experience = [
     company: "CNH Industrials",
     role: "Summer Intern",
     period: "June 2022 - July 2022",
-    location: "Pitampur, MP",
+    location: "Pithampur, MP",
     description: "Conducted purchasing research and developed price negotiation strategies resulting in a 5% reduction in raw material costs."
   }
 ];
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -129,27 +141,35 @@ export default function Portfolio() {
   };
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-background text-foreground selection:bg-accent/30 selection:text-accent font-sans">
+    <div ref={containerRef} className="relative min-h-screen bg-background text-foreground selection:bg-primary/30 selection:text-primary font-sans cyber-grid">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-8 md:px-16 backdrop-blur-md bg-background/80 border-b border-white/5">
-        <div className="text-2xl font-serif tracking-[2px] uppercase">
+      <motion.nav 
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: "-100%" },
+        }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-16 backdrop-blur-xl bg-background/40 border-b border-primary/10"
+      >
+        <div className="text-xl md:text-2xl font-bold tracking-[2px] uppercase text-primary">
           K. Rajauria
         </div>
-        <div className="hidden md:flex items-center gap-10 text-[13px] uppercase tracking-[1px] text-muted-foreground">
-          <a href="#work" className="hover:text-foreground transition-colors border-accent/0 hover:border-b border-accent pb-1">Projects</a>
-          <a href="#experience" className="hover:text-foreground transition-colors border-accent/0 hover:border-b border-accent pb-1">Experience</a>
-          <a href="#about" className="hover:text-foreground transition-colors border-accent/0 hover:border-b border-accent pb-1">Profile</a>
-          <a href="#contact" className="hover:text-foreground transition-colors border-accent/0 hover:border-b border-accent pb-1">Contact</a>
+        <div className="hidden md:flex items-center gap-10 text-[13px] uppercase tracking-[2px] font-mono text-muted-foreground">
+          <a href="#work" className="hover:text-primary transition-colors border-primary/0 hover:border-b border-primary pb-1">Projects</a>
+          <a href="#experience" className="hover:text-primary transition-colors border-primary/0 hover:border-b border-primary pb-1">Experience</a>
+          <a href="#about" className="hover:text-primary transition-colors border-primary/0 hover:border-b border-primary pb-1">Profile</a>
+          <a href="#contact" className="hover:text-primary transition-colors border-primary/0 hover:border-b border-primary pb-1">Contact</a>
         </div>
         <Link to="/resume">
-          <Button variant="outline" className="rounded-none border-white/20 hover:bg-white/5 font-serif italic px-6">
+          <Button variant="outline" className="rounded-md border-primary/30 hover:bg-primary/10 font-mono px-6 neon-blue">
             Resume
           </Button>
         </Link>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-10 md:px-16 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 md:px-16 pt-48 md:pt-24 overflow-hidden">
         <main className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-16 items-center">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -160,22 +180,23 @@ export default function Portfolio() {
             <span className="label-caps mb-4 block">
               Electrical & Electronics Engineer
             </span>
-            <h1 className="text-display text-6xl md:text-8xl lg:text-9xl mb-8">
-              Kartik <br /> Rajauria
+            <h1 className="text-display text-5xl md:text-8xl lg:text-9xl mb-8 leading-tight">
+              Kartik <br /> <span className="text-primary">Rajauria</span>
             </h1>
             <p className="max-w-lg text-muted-foreground text-lg md:text-xl leading-relaxed mb-10 font-sans">
-              Specializing in power electronics, EV technology, and industrial automation. 
-              Bridging the gap between electrical engineering and modern software solutions.
+              I am focused on creating <span className="text-accent">real-world impact</span>. My work centers on improving workflows and enhancing visibility to solve meaningful problems through modern solutions.
             </p>
             <div className="flex flex-col sm:flex-row items-start gap-6">
-              <Button size="lg" className="bg-accent hover:bg-accent/90 text-background rounded-none px-10 h-14 text-base font-serif italic group">
-                View Projects
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <a href="#work">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-background rounded-md px-10 h-14 text-base font-bold group neon-blue">
+                  View Projects
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </a>
               <div className="flex items-center gap-6 py-4">
-                <a href="https://www.linkedin.com/in/kartik-rajauria-2a52b521a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors text-xs uppercase tracking-widest">LinkedIn</a>
-                <a href="https://www.instagram.com/kartikrajaur?igsh=ZTRrazZkdDNsenR2&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors text-xs uppercase tracking-widest">Instagram</a>
-                <a href="https://www.facebook.com/share/1At38yUCBv/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors text-xs uppercase tracking-widest">Facebook</a>
+                <a href="https://www.linkedin.com/in/kartik-rajauria-2a52b521a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-widest font-mono">LinkedIn</a>
+                <a href="https://www.instagram.com/kartikrajaur?igsh=ZTRrazZkdDNsenR2&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-widest font-mono">Instagram</a>
+                <a href="https://www.facebook.com/share/1At38yUCBv/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors text-xs uppercase tracking-widest font-mono">Facebook</a>
               </div>
             </div>
           </motion.div>
@@ -184,14 +205,15 @@ export default function Portfolio() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, duration: 1.5 }}
-            className="hidden lg:block relative aspect-[3/4] bg-card border border-white/5 p-1"
+            className="hidden lg:block relative aspect-[3/4] bg-card border border-primary/20 p-1 rounded-lg overflow-hidden neon-blue"
           >
             <img 
               src="/Gemini_Generated_Image_4x561s4x561s4x56.png" 
               alt="Kartik Rajauria"
-              className="object-cover w-full h-full hover:scale-105 transition-all duration-1000"
+              className="object-cover w-full h-full hover:scale-110 transition-all duration-1000 grayscale hover:grayscale-0"
               referrerPolicy="no-referrer"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent pointer-events-none" />
           </motion.div>
         </main>
 
@@ -212,7 +234,7 @@ export default function Portfolio() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
             <div>
               <span className="label-caps mb-4 block">Research & Development</span>
-              <h2 className="text-heading text-5xl md:text-7xl">Projects<span className="text-accent">.</span></h2>
+              <h2 className="text-heading text-5xl md:text-7xl">Projects<span className="text-primary">.</span></h2>
             </div>
             <p className="max-w-md text-muted-foreground text-lg font-sans">
               A collection of engineering projects focused on power conversion, EV systems, and innovative hardware.
@@ -228,21 +250,22 @@ export default function Portfolio() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
               >
-                <Card className="group rounded-none bg-card border-white/5 hover:border-accent/30 transition-all duration-500 overflow-hidden h-full">
+                <Card className="group rounded-lg bg-card/50 border-primary/10 hover:border-primary/40 transition-all duration-500 overflow-hidden h-full glass">
                   <CardContent className="p-0">
-                    <div className="relative aspect-[4/5] overflow-hidden border-b border-white/5">
+                    <div className="relative aspect-[4/5] overflow-hidden border-b border-primary/10">
                       <img 
                         src={project.image} 
                         alt={project.title}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-all duration-700"
+                        className="object-cover w-full h-full group-hover:scale-110 transition-all duration-700"
                         referrerPolicy="no-referrer"
                       />
+                      <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
                     <div className="p-6">
-                      <div className="text-[10px] uppercase tracking-[2px] text-muted-foreground mb-3">
+                      <div className="text-[10px] uppercase tracking-[2px] text-primary mb-3 font-mono">
                         {project.category}
                       </div>
-                      <h3 className="text-xl font-serif mb-2 group-hover:text-accent transition-colors">
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                         {project.title}
                       </h3>
                       <p className="text-xs text-muted-foreground font-sans mb-4 line-clamp-3">
@@ -250,7 +273,7 @@ export default function Portfolio() {
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {project.tags.map(tag => (
-                          <Badge key={tag} variant="outline" className="rounded-none text-[8px] border-white/10 px-2 py-0">
+                          <Badge key={tag} variant="outline" className="rounded-md text-[8px] border-primary/20 text-primary px-2 py-0 font-mono">
                             {tag}
                           </Badge>
                         ))}
@@ -307,6 +330,58 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Awards Section */}
+      <section id="awards" className="py-32 px-10 md:px-16 lg:px-24 bg-primary/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+            <div>
+              <span className="label-caps mb-4 block">Recognition</span>
+              <h2 className="text-heading text-5xl md:text-7xl">Awards<span className="text-accent">.</span></h2>
+            </div>
+            <p className="max-w-md text-muted-foreground text-lg font-sans">
+              Honored for excellence in industrial innovation and technical shopfloor solutions.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Operation Innovation Challenge",
+                org: "VE Commercial Vehicles",
+                award: "Winner",
+                desc: "Presented innovative machine shopfloor optimization projects."
+              },
+              {
+                title: "Technology Day",
+                org: "VE Commercial Vehicles",
+                award: "Winner",
+                desc: "Recognized for technical excellence in shopfloor implementation."
+              },
+              {
+                title: "CII Innovation Challenge",
+                org: "Maintenance Circle",
+                award: "Platinum Winner",
+                desc: "Highest recognition for maintenance innovation in machine shop operations."
+              }
+            ].map((item, idx) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="p-8 bg-card/50 border border-primary/10 rounded-lg glass neon-blue group hover:border-accent/40 transition-all"
+              >
+                <div className="text-accent font-mono text-xs uppercase tracking-widest mb-4">{item.award}</div>
+                <h3 className="text-2xl font-bold mb-2 group-hover:text-primary transition-colors">{item.title}</h3>
+                <div className="text-muted-foreground text-sm font-mono mb-4">{item.org}</div>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Skills Section */}
       <section id="skills" className="py-32 px-10 md:px-16 lg:px-24">
         <div className="max-w-7xl mx-auto">
@@ -330,12 +405,12 @@ export default function Portfolio() {
                   className="space-y-6"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="text-accent">{skill.icon}</div>
-                    <h3 className="text-xl font-serif uppercase tracking-widest">{skill.name}</h3>
+                    <div className="text-primary">{skill.icon}</div>
+                    <h3 className="text-xl font-bold uppercase tracking-widest font-mono">{skill.name}</h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {skill.items.map(item => (
-                      <Badge key={item} variant="outline" className="rounded-none border-white/10 text-[10px] uppercase tracking-widest px-3 py-1 bg-white/[0.02]">
+                      <Badge key={item} variant="outline" className="rounded-md border-primary/20 text-[10px] uppercase tracking-widest px-3 py-1 bg-primary/5 text-primary font-mono glass">
                         {item}
                       </Badge>
                     ))}
@@ -354,17 +429,17 @@ export default function Portfolio() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative p-1 border border-white/5 bg-card"
+            className="relative p-1 border border-primary/20 bg-card rounded-lg overflow-hidden neon-blue"
           >
             <img 
               src="/Gemini_Generated_Image_40jynt40jynt40jy.png" 
               alt="Academic Excellence"
-              className="object-cover w-full aspect-[4/5]"
+              className="object-cover w-full aspect-[4/5] grayscale hover:grayscale-0 transition-all duration-700"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-accent p-10 flex flex-col justify-center text-background">
-              <span className="text-5xl font-serif">9.1</span>
-              <span className="text-[10px] uppercase tracking-widest font-bold leading-tight">B.Tech GPA <br /> SRM University</span>
+            <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-primary p-10 flex flex-col justify-center text-background neon-blue">
+              <span className="text-5xl font-bold font-mono">9.1</span>
+              <span className="text-[10px] uppercase tracking-widest font-bold leading-tight font-mono">B.Tech GPA <br /> SRM University</span>
             </div>
           </motion.div>
 
@@ -374,28 +449,28 @@ export default function Portfolio() {
             viewport={{ once: true }}
           >
             <span className="label-caps mb-4 block">Profile</span>
-            <h2 className="text-heading text-5xl md:text-6xl mb-10">Academic Excellence<span className="text-accent">.</span></h2>
+            <h2 className="text-heading text-5xl md:text-6xl mb-10">Academic Excellence<span className="text-primary">.</span></h2>
             <div className="space-y-8 text-muted-foreground text-lg leading-relaxed font-sans">
               <p>
                 MBA from T. A. Pai Management Institute (TAPMI), commencing June 2026. 
                 Previously completed B.Tech in Electrical and Electronics Engineering from SRM University of Science and Technology, Chennai, with a GPA of 9.1.
               </p>
-              <p className="italic font-serif text-foreground">
-                "Passionate about the intersection of electrical systems and digital intelligence."
+              <p className="italic font-mono text-primary">
+                "Committed to leveraging technical precision with strategic management to drive organizational growth and operational excellence."
               </p>
               <p>
                 Beyond academics, I served as the Committee Head for AARUUSH, SRM's national-level techno-fest, 
                 managing quality assurance and coordinating large-scale events.
               </p>
             </div>
-            <div className="mt-12 flex flex-wrap gap-10 border-t border-white/5 pt-10">
+            <div className="mt-12 flex flex-wrap gap-10 border-t border-primary/10 pt-10">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-accent font-bold mb-2 block">Location</span>
-                <span className="text-sm font-serif italic">Indore, Madhya Pradesh</span>
+                <span className="text-[10px] uppercase tracking-widest text-primary font-bold mb-2 block font-mono">Location</span>
+                <span className="text-sm font-medium">Indore, Madhya Pradesh</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-accent font-bold mb-2 block">Interests</span>
-                <span className="text-sm font-serif italic">Gym, Badminton</span>
+                <span className="text-[10px] uppercase tracking-widest text-primary font-bold mb-2 block font-mono">Interests</span>
+                <span className="text-sm font-medium">Gym, Badminton</span>
               </div>
             </div>
           </motion.div>
@@ -403,29 +478,29 @@ export default function Portfolio() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-32 px-10 md:px-16 lg:px-24 border-t border-white/5">
+      <section id="contact" className="py-32 px-10 md:px-16 lg:px-24 border-t border-primary/10">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-20">
             <span className="label-caps mb-4 block">Get in touch</span>
             <h2 className="text-heading text-5xl md:text-7xl mb-6">Let's collaborate</h2>
-            <p className="text-serif italic text-xl text-muted-foreground">Available for engineering and development ventures.</p>
+            <p className="font-mono text-primary text-xl">Available for future endeavors.</p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
             <div className="space-y-12">
               <div className="space-y-4">
-                <h3 className="text-sm uppercase tracking-[3px] text-accent font-bold">Contact Details</h3>
+                <h3 className="text-sm uppercase tracking-[3px] text-primary font-bold font-mono">Contact Details</h3>
                 <div className="space-y-6">
                   <div className="group cursor-pointer">
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1">Email</span>
-                    <span className="text-2xl font-serif italic group-hover:text-accent transition-colors">rajauriak1@gmail.com</span>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1 font-mono">Email</span>
+                    <span className="text-2xl font-bold group-hover:text-primary transition-colors">rajauriak1@gmail.com</span>
                   </div>
                   <div className="group">
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1">Socials</span>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1 font-mono">Socials</span>
                     <div className="flex flex-col gap-2">
-                      <a href="https://www.linkedin.com/in/kartik-rajauria-2a52b521a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" className="text-2xl font-serif italic hover:text-accent transition-colors">LinkedIn</a>
-                      <a href="https://www.instagram.com/kartikrajaur?igsh=ZTRrazZkdDNsenR2&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-2xl font-serif italic hover:text-accent transition-colors">Instagram</a>
-                      <a href="https://www.facebook.com/share/1At38yUCBv/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-2xl font-serif italic hover:text-accent transition-colors">Facebook</a>
+                      <a href="https://www.linkedin.com/in/kartik-rajauria-2a52b521a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" className="text-2xl font-bold hover:text-primary transition-colors">LinkedIn</a>
+                      <a href="https://www.instagram.com/kartikrajaur?igsh=ZTRrazZkdDNsenR2&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-2xl font-bold hover:text-primary transition-colors">Instagram</a>
+                      <a href="https://www.facebook.com/share/1At38yUCBv/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-2xl font-bold hover:text-primary transition-colors">Facebook</a>
                     </div>
                   </div>
                 </div>
@@ -436,19 +511,19 @@ export default function Portfolio() {
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-accent/10 border border-accent/20 p-12 text-center space-y-6"
+                className="bg-primary/5 border border-primary/20 p-12 text-center space-y-6 rounded-lg glass neon-blue"
               >
-                <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 neon-blue">
                   <Check className="w-10 h-10 text-background" />
                 </div>
-                <h3 className="text-3xl font-serif italic">Message Sent!</h3>
-                <p className="text-muted-foreground max-w-xs mx-auto">
+                <h3 className="text-3xl font-bold text-primary">Message Sent!</h3>
+                <p className="text-muted-foreground max-w-xs mx-auto font-sans">
                   Thank you for reaching out. I'll get back to you as soon as possible.
                 </p>
                 <Button 
                   onClick={() => setSubmitted(false)}
                   variant="outline" 
-                  className="rounded-none border-white/10 hover:bg-white/5"
+                  className="rounded-md border-primary/20 hover:bg-primary/10 font-mono"
                 >
                   Send Another Message
                 </Button>
@@ -457,38 +532,38 @@ export default function Portfolio() {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Name</label>
+                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1 font-mono">Name</label>
                     <Input 
                       required
                       value={formState.name}
                       onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                      className="rounded-none bg-white/[0.02] border-white/10 h-14 focus:border-accent/50" 
+                      className="rounded-md bg-white/[0.02] border-primary/10 h-14 focus:border-primary/50 focus:ring-primary/20 transition-all" 
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Email</label>
+                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1 font-mono">Email</label>
                     <Input 
                       required
                       type="email" 
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                      className="rounded-none bg-white/[0.02] border-white/10 h-14 focus:border-accent/50" 
+                      className="rounded-md bg-white/[0.02] border-primary/10 h-14 focus:border-primary/50 focus:ring-primary/20 transition-all" 
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1">Message</label>
+                  <label className="text-[10px] uppercase tracking-widest text-muted-foreground ml-1 font-mono">Message</label>
                   <Textarea 
                     required
                     value={formState.message}
                     onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                    className="rounded-none bg-white/[0.02] border-white/10 min-h-[160px] focus:border-accent/50" 
+                    className="rounded-md bg-white/[0.02] border-primary/10 min-h-[160px] focus:border-primary/50 focus:ring-primary/20 transition-all" 
                   />
                 </div>
                 <Button 
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-16 bg-accent hover:bg-accent/90 text-background rounded-none text-lg font-serif italic disabled:opacity-50"
+                  className="w-full h-16 bg-primary hover:bg-primary/90 text-background rounded-md text-lg font-bold disabled:opacity-50 neon-blue"
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
@@ -499,16 +574,16 @@ export default function Portfolio() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-10 md:px-16 border-t border-white/5 bg-background">
+      <footer className="py-16 px-10 md:px-16 border-t border-primary/10 bg-background/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-          <div className="text-serif italic text-lg">Indore, Madhya Pradesh — Kartik Rajauria</div>
-          <div className="flex items-center gap-10 text-[11px] uppercase tracking-[2px] font-medium text-muted-foreground">
-            <a href="https://www.linkedin.com/in/kartik-rajauria-2a52b521a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">LinkedIn</a>
-            <a href="https://www.instagram.com/kartikrajaur?igsh=ZTRrazZkdDNsenR2&utm_source=qr" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Instagram</a>
-            <a href="https://www.facebook.com/share/1At38yUCBv/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Facebook</a>
+          <div className="font-mono text-primary text-lg">Indore, Madhya Pradesh — Kartik Rajauria</div>
+          <div className="flex items-center gap-10 text-[11px] uppercase tracking-[2px] font-mono text-muted-foreground">
+            <a href="https://www.linkedin.com/in/kartik-rajauria-2a52b521a?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a>
+            <a href="https://www.instagram.com/kartikrajaur?igsh=ZTRrazZkdDNsenR2&utm_source=qr" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Instagram</a>
+            <a href="https://www.facebook.com/share/1At38yUCBv/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Facebook</a>
           </div>
         </div>
-        <div className="mt-16 text-center text-[10px] uppercase tracking-[4px] opacity-20">
+        <div className="mt-16 text-center text-[10px] uppercase tracking-[4px] opacity-20 font-mono">
           © 2026 KARTIK RAJAURIA PORTFOLIO
         </div>
       </footer>
