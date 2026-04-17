@@ -1,6 +1,28 @@
-import React, { useState } from "react";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
+import React, { useState, useRef } from "react";
+import { motion, useScroll, useMotionValueEvent, useInView } from "motion/react";
 import { ArrowLeft, Download, Mail, Phone, MapPin, Linkedin, ExternalLink } from "lucide-react";
+
+// Helper component for line-by-line text reveal
+const TextReveal = ({ text, className }: { text: string; className?: string }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
+
+  return (
+    <div ref={ref} className={className}>
+      {text.split("\n").map((line, i) => (
+        <div key={i} className="overflow-hidden">
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={isInView ? { y: 0 } : { y: "100%" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+          >
+            {line}
+          </motion.div>
+        </div>
+      ))}
+    </div>
+  );
+};
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -53,13 +75,10 @@ const Resume = () => {
       <main className="pt-48 pb-32 px-10 md:px-16 lg:px-24 max-w-5xl mx-auto">
         {/* Header */}
         <header className="mb-24">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <TextReveal 
+            text={`Resume.`}
             className="text-7xl md:text-9xl font-bold mb-8 text-primary"
-          >
-            Resume<span className="text-accent">.</span>
-          </motion.h1>
+          />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
             <div className="space-y-4">
